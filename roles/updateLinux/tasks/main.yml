@@ -1,0 +1,8 @@
+---
+- name: Upgrade packages
+  become: yes
+  package:
+    state: latest
+    update_cache: yes
+    upgrade: yes
+    autoremove: yes

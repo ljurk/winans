@@ -1,0 +1,9 @@
+---
+ansible_user: vagrant
+ansible_password: vagrant
+ansible_become_user: vagrant
+ansible_become_password: vagrant
+ansible_port: 55986
+ansible_connection: winrm
+ansible_winrm_server_cert_validation: ignore
+ansible_winrm_transport: basic

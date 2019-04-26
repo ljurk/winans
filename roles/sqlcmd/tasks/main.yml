@@ -1,0 +1,18 @@
+---
+- name: High Avaibilty Failover "{{ sqlcmd_script_path }}"
+  win_command: SQLCMD.EXE  -S CMCLUSAGQUAL\slmquality -i "{{ sqlcmd_script_path }}"
+  args:
+    executable: powershell.exe
+  register: sqlcmd_output
+  become: yes
+  become_method: runas
+
+
+
+- name: check
+  assert:
+    that:
+     - "sqlcmd_output.stdout_lines | length == 2"
+    fail_msg: "FAIL \n {{ sqlcmd_output.stdout }}"
+    success_msg: "SUCCESS" 
+

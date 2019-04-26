@@ -1,0 +1,9 @@
+---
+- name: install webserver
+  include_role: 
+    name: webserver
+
+- name: install application request routing (arr)
+  win_chocolatey:
+    name: iis-arr
+        state: present

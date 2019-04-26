@@ -1,0 +1,8 @@
+---
+- hosts:
+    - vag
+  roles:
+    - update
+    - npp
+    - webserver
+
