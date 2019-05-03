@@ -1,0 +1,99 @@
+---
+
+#TLS 1.0
+- name: check for tls1.0 key
+  win_regedit:
+      path: "{{ item }}"
+      state: present
+  with_items:
+      - HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0
+      - HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server
+      - HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client
+  register: win_regedit1
+
+- name: disable server tls 1.0
+  win_regedit:
+      path: "{{ item.path }}"
+      name: "{{ item.name }}"
+      data: "{{ item.data }}"
+      type: "{{ item.type }}"
+  loop:
+      - { path: 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server', name: 'Enabled', data: 0, type: 'dword' }
+      - { path: 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client', name: 'Enabled', data: 0, type: 'dword' }
+      - { path: 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server', name: 'DisabledByDefault', data: 0, type: 'dword' }
+      - { path: 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client', name: 'DisabledByDefault', data: 0, type: 'dword' }
+  register: win_regedit1enabled
+
+#TLS 1.1
+- name: check for tls1.1 keys
+  win_regedit:
+      path: "{{ item }}"
+      state: present
+  with_items:
+      - HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1
+      - HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server
+      - HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client
+  register: win_regedit11
+
+- name: disable tls 1.1
+  win_regedit:
+      path: "{{ item.path }}"
+      name: "{{ item.name }}"
+      data: "{{ item.data }}"
+      type: "{{ item.type }}"
+  loop:
+      - { path: 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server', name: 'Enabled', data: 0, type: 'dword' }
+      - { path: 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client', name: 'Enabled', data: 0, type: 'dword' }
+      - { path: 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server', name: 'DisabledByDefault', data: 0, type: 'dword' }
+      - { path: 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client', name: 'DisabledByDefault', data: 0, type: 'dword' }
+  register: win_regedit11enabled
+
+#TLS 1.2
+- name: check for tls1.2 keys
+  win_regedit:
+      path: "{{ item }}"
+      state: present
+  with_items:
+      - HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2
+      - HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server
+      - HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Client
+  register: win_regedit12
+
+- name: enable tls 1.2
+  win_regedit:
+      path: "{{ item.path }}"
+      name: "{{ item.name }}"
+      data: "{{ item.data }}"
+      type: "{{ item.type }}"
+  loop:
+      - { path: 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server', name: 'Enabled', data: 4294967295, type: 'dword' }
+      - { path: 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Client', name: 'Enabled', data: 4294967295, type: 'dword' }
+      - { path: 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server', name: 'DisabledByDefault', data: 0, type: 'dword' }
+      - { path: 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Client', name: 'DisabledByDefault', data: 0, type: 'dword' }
+  register: win_regedit12enabled
+
+- name: Reboot host if required
+  win_reboot:
+    reboot_timeout: 3600
+  when: win_regedit1.results[0].changed or 
+        win_regedit1.results[1].changed or 
+        win_regedit1.results[2].changed or
+        win_regedit11.results[0].changed or 
+        win_regedit11.results[1].changed or
+        win_regedit11.results[2].changed or  
+        win_regedit12.results[0].changed or
+        win_regedit12.results[1].changed or
+        win_regedit12.results[2].changed or
+        win_regedit1enabled.results[0].changed or
+        win_regedit1enabled.results[1].changed or
+        win_regedit1enabled.results[2].changed or
+        win_regedit1enabled.results[3].changed or
+        win_regedit11enabled.results[0].changed or
+        win_regedit11enabled.results[1].changed or
+        win_regedit11enabled.results[2].changed or
+        win_regedit11enabled.results[3].changed or
+        win_regedit12enabled.results[0].changed or
+        win_regedit12enabled.results[1].changed or
+        win_regedit12enabled.results[2].changed or
+        win_regedit12enabled.results[3].changed
+

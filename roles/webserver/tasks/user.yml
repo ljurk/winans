@@ -1,0 +1,15 @@
+---
+#add user to 
+- name: "Add {{ webserver_user }} to IIS_IUSRS"
+  win_group_membership:
+    name: IIS_IUSRS
+    members:
+      - "{{ webserver_user }}"
+    state: present
+
+- name: "Remove {{ webserver_user }} from local admins"
+  win_group_membership:
+    name: IIS_IUSRS
+    members:
+      - "{{ webserver_user }}"
+    state: present

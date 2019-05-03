@@ -1,0 +1,7 @@
+---
+- name: Create a virtual directory if it does not exist
+  win_iis_virtualdirectory:
+    name: scripts2
+    site: "{{ webserver_site_name }}"
+    state: present
+    physical_path: "{{ webserver_scripts_path }}"

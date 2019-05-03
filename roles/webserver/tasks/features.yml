@@ -1,0 +1,33 @@
+
+# full list of windows features: http://geekswithblogs.net/Wchrabaszcz/archive/2013/09/04/how-to-install-windows-server-features-using-powershell--server.aspx
+- name: Install IIS
+  win_feature:
+    name:
+      - Web-Server
+      # common
+      - Web-Static-Content
+      - Web-Default-Doc
+      - Web-Http-Errors
+      # performance
+      - Web-Stat-Compression
+      # security
+      - Web-Filtering
+      - Web-IP-Security
+      - Web-Windows-Auth
+      # health
+      - Web-Http-Logging
+      # application development
+      #- Web-Net-Ext
+      #- Web-Net-Ext45
+      #- Web-Asp-Net
+      #- Web-Asp-Net45
+      - Web-CGI
+      - Web-ISAPI-Ext
+    state: present
+    include_management_tools: True
+  register: win_feature
+
+- name: Reboot host if required
+  win_reboot:
+    reboot_timeout: 3600
+  when: win_feature.reboot_required
