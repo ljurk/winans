@@ -72,15 +72,43 @@
       - { path: 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Client', name: 'DisabledByDefault', data: 0, type: 'dword' }
   register: win_regedit12enabled
 
+#enable secure ciphers
+- name: enable secure ciphers
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Control\Cryptography\Configuration\Local\SSL\00010002
+      name: Functions
+      type: multistring
+      data:
+          #recommandations BSI
+        - TLS_DHE_RSA_WITH_AES_128_CBC_SHA256
+        - TLS_DHE_RSA_WITH_AES_256_CBC_SHA256
+        - TLS_DHE_RSA_WITH_AES_128_GCM_SHA256
+        - TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
+        - TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256
+        - TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384
+        - TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256
+        - TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384
+        - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+        - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        - TLS_DHE_DSS_WITH_AES_128_CBC_SHA256
+        - TLS_DHE_DSS_WITH_AES_256_CBC_SHA256
+        - TLS_DHE_DSS_WITH_AES_128_GCM_SHA256
+        - TLS_DHE_DSS_WITH_AES_256_GCM_SHA384
+        - TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+        - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256
+  register: win_regedit_cipher
+
 - name: Reboot host if required
   win_reboot:
     reboot_timeout: 3600
-  when: win_regedit1.results[0].changed or 
-        win_regedit1.results[1].changed or 
+  when: win_regedit1.results[0].changed or
+        win_regedit1.results[1].changed or
         win_regedit1.results[2].changed or
-        win_regedit11.results[0].changed or 
+        win_regedit11.results[0].changed or
         win_regedit11.results[1].changed or
-        win_regedit11.results[2].changed or  
+        win_regedit11.results[2].changed or
         win_regedit12.results[0].changed or
         win_regedit12.results[1].changed or
         win_regedit12.results[2].changed or
@@ -95,5 +123,5 @@
         win_regedit12enabled.results[0].changed or
         win_regedit12enabled.results[1].changed or
         win_regedit12enabled.results[2].changed or
-        win_regedit12enabled.results[3].changed
-
+        win_regedit12enabled.results[3].changed or
+        win_regedit_cipher.changed
