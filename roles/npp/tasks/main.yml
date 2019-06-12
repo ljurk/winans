@@ -1,5 +1,7 @@
 # Install/uninstall with chocolatey
-- name: Ensure Notepad++ is installed via Chocolatey
+# context menu on old servers: http://docs.notepad-plus-plus.org/index.php/Explorer_Context_Menu
+- name: Ensure latest Notepad++ is installed via Chocolatey
   win_chocolatey:
     name: notepadplusplus
-    state: present
+    state: latest
+  tags: npp

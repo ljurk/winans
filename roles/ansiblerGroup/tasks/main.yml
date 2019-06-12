@@ -1,3 +1,4 @@
+---
 - name: Add ansibler@cmgmt.tu-dresden.de to local admins
   win_group_membership:
     name: Administratoren

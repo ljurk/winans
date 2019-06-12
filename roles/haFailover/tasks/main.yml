@@ -28,7 +28,7 @@
   win_command: SQLCMD.EXE -S "{{ haFailover_listener }}" -q "select synchronization_health_desc from sys.dm_hadr_availability_replica_states"
   register: haFailover_health_output
   until: haFailover_health_output.stdout.find('NOT_HEALTHY') == -1
-  retries: 10
+  retries: 20
   delay: 1
   become: yes
   become_method: runas

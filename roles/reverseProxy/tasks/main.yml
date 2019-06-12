@@ -6,4 +6,4 @@
 - name: install application request routing (arr)
   win_chocolatey:
     name: iis-arr
-        state: present
+    state: present
