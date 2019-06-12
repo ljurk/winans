@@ -100,6 +100,9 @@
         - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256
   register: win_regedit_cipher
 
+- debug:
+    var: win_regedit_cipher
+
 - name: Reboot host if required
   win_reboot:
     reboot_timeout: 3600

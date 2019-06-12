@@ -1,6 +1,9 @@
 ---
 
-- include: features.yml
+#- include: features.yml
+#  when: type == 'webserver' or type == 'reverseProxy'
+
+- include: mgmt.yml
   when: type == 'webserver' or type == 'reverseProxy'
 
 - include: urlLength.yml
@@ -12,7 +15,7 @@
 - include: user.yml
   when: type == 'webserver'
 
-- include: virtualDir.yml
-  when: type == 'webserver'
+  #- include: virtualDir.yml
+  #  when: type == 'webserver'
 
 
